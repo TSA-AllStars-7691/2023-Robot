@@ -81,8 +81,8 @@ public final class Constants {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 3; // meters per second
-    public static final double maxAngularVelocity = 5;
+    public static final double maxSpeed = 2; // meters per second
+    public static final double maxAngularVelocity = 3;
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
@@ -121,7 +121,7 @@ public final class Constants {
       public static final int driveMotorID = 1;
       public static final int angleMotorID = 2;
       public static final int canCoderID = 3;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-37.354);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(142.466);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
     }
