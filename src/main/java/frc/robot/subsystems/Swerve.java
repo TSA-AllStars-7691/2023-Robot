@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,10 +18,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 public class Swerve extends SubsystemBase {
-  private Pigeon2 gyro;
-
+  private final ADIS16470_IMU gyro = new ADIS16470_IMU();
   private SwerveDrivePoseEstimator swervePoseEstimator;
   private SwerveModule[] mSwerveMods;
 
@@ -31,7 +30,6 @@ public class Swerve extends SubsystemBase {
   private Field2d field;
 
   public Swerve() {
-    gyro = new Pigeon2(Constants.Swerve.pigeonID);
     zeroGyro();
 
     mSwerveMods = new SwerveModule[] {
@@ -114,11 +112,11 @@ public class Swerve extends SubsystemBase {
   }
 
   public void zeroGyro() {
-    gyro.setYaw(0);
+    gyro.reset();
   }
 
   public Rotation2d getPitch() {
-    return Rotation2d.fromDegrees(gyro.getPitch());
+    return Rotation2d.fromDegrees(gyro.getXComplementaryAngle());
   }
 
   public PathPoint getPoint() {
@@ -127,8 +125,8 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw());
+        ? Rotation2d.fromDegrees(360 - (gyro.getAngle()% 360))
+        : Rotation2d.fromDegrees(gyro.getAngle()% 360);
   }
 
   @Override
@@ -145,7 +143,7 @@ public class Swerve extends SubsystemBase {
 
         field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getAngle());
     SmartDashboard.putNumber("Pigeon2 Pitch", getPitch().getDegrees());
 
     for (SwerveModule mod : mSwerveMods) {
