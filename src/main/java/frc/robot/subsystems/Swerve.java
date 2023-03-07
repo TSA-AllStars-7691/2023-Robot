@@ -119,6 +119,10 @@ public class Swerve extends SubsystemBase {
     return Rotation2d.fromDegrees(gyro.getXComplementaryAngle());
   }
 
+  public Rotation2d getRoll() {
+    return Rotation2d.fromDegrees(gyro.getYComplementaryAngle());
+  }
+
   public PathPoint getPoint() {
     return new PathPoint(getPose().getTranslation(), getPose().getRotation());
   }
@@ -131,20 +135,26 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-        swervePoseEstimator.update(getYaw(), getPositions());
+    Rotation2d yawValue = getYaw();
+    double rawYawValue = gyro.getAngle();
+    // System.out.printf("DEBUG: yawValue: %s\n", yawValue);
+    // System.out.printf("DEBUG: rawYawValue: %s\n", rawYawValue);
+
+        swervePoseEstimator.update(yawValue, getPositions());
         Optional<EstimatedRobotPose> result =
                 pcw.getEstimatedGlobalPose(getPose());
 
         if (result.isPresent()) {
             EstimatedRobotPose camPose = result.get();
-            swervePoseEstimator.addVisionMeasurement(
-                    camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+            // swervePoseEstimator.addVisionMeasurement(
+            //         camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
         }
 
         field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon2 Yaw", gyro.getAngle());
+    SmartDashboard.putNumber("Pigeon2 Yaw", rawYawValue);
     SmartDashboard.putNumber("Pigeon2 Pitch", getPitch().getDegrees());
+    SmartDashboard.putNumber("Pigeon2 Roll", getRoll().getDegrees());
 
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
