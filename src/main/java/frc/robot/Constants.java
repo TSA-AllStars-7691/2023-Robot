@@ -1,24 +1,27 @@
 package frc.robot;
 
-import java.util.ArrayList;
-
 import com.pathplanner.lib.PathConstraints;
 import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
-import frc.lib.config.SwerveModuleConstants;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.lib.PIDGains;
-import java.lang.Math;
+import frc.lib.config.SwerveModuleConstants;
+
+import java.util.ArrayList;
+
 public final class Constants {
+
+  public static final class OIConstants {
+    public static final int kDriverController = 0;
+    public static final int kOperatorController = 1;
+    public static final double kDriveDeadband = 0.05;
+    public static final double kArmManualDeadband = 0.05;
+    public static final double kArmManualScale = 0.5;
+  }
 
   public static final class Swerve {
     public static final double stickDeadband = 0.1;
