@@ -82,7 +82,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4.4196; // meters per second
-    public static final double maxAngularVelocity = 3;
+    public static final double maxAngularVelocity = 4.4; // meters per second
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
@@ -184,7 +184,7 @@ public final class Constants {
   }
 
   public static final class Arm {
-    public static final int kArmCanId = 5;
+    public static final int kArmCanId = 13;
     public static final boolean kArmInverted = false;
     public static final int kCurrentLimit = 40;
 
@@ -207,10 +207,10 @@ public final class Constants {
 }
 
 public static final class Gripper {
-    public static final int kGripperCanId = 6;
+    public static final int kGripperCanId = 14;
     public static final double kSoftLimitReverse = -34.0;
     public static final double kSoftLimitForward = 5.0;
-    public static final double kClosePosition = 0.0;
+    public static final double kClosePosition = 0;
     public static final double kOpenPosition = -34.0;
     public static final double kSafePosition = -29.0;
     public static final int kCurrentLimit = 10;

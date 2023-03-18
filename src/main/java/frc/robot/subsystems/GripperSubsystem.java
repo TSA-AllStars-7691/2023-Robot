@@ -51,11 +51,20 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public void openGripper() {
+    System.out.println(m_setpoint);
+    System.out.println("+++++value before is m_setpoint val++++");
     m_setpoint = Constants.Gripper.kOpenPosition;
+    System.out.println(m_setpoint);
+    System.out.println("+++++Open Gripper Method Ran+++++");
+
   }
 
   public void closeGripper() {
+    System.out.println(m_setpoint);
+    System.out.println("+++++value before is m_setpoint val++++");
     m_setpoint = Constants.Gripper.kClosePosition;
+    System.out.println(m_setpoint);
+    System.out.println("+++++Close Gripper Method Ran+++++");
   }
 
   @Override
@@ -64,6 +73,7 @@ public class GripperSubsystem extends SubsystemBase {
       m_controller.setReference(m_setpoint, CANSparkMax.ControlType.kPosition);
     }
     m_prevSetpoint = m_setpoint;
+    System.out.println(m_setpoint);
   }
 
   @Override

@@ -74,8 +74,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    driver.x().onTrue(new AutoBalancing(s_Swerve));
+   // driver.x().onTrue(new AutoBalancing(s_Swerve));
     driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    driver.x().onTrue(new InstantCommand(() -> m_gripper.closeGripper()));
+    driver.b().onTrue(new InstantCommand(() -> m_gripper.openGripper()));
   }
 
   private void configureSmartDashboard() {
