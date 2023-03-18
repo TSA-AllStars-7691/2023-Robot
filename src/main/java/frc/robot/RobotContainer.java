@@ -6,29 +6,30 @@ package frc.robot;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.executeTrajectory;
+import frc.robot.commands.AutoBalancing;
+import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
-  /* Controllers */
-  private final CommandXboxController driver = new CommandXboxController(0);
-
   /* Drive Controls */
   private static final int translationAxis = XboxController.Axis.kLeftY.value;
   private static final int strafeAxis = XboxController.Axis.kLeftX.value;
   private static final int rotationAxis = XboxController.Axis.kRightX.value;
-
+  /* Controllers */
+  private final CommandXboxController driver = new CommandXboxController(Constants.OIConstants.kDriverController);
+  private final CommandXboxController operator = new CommandXboxController(Constants.OIConstants.kOperatorController);
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final GripperSubsystem m_gripper = new GripperSubsystem();
@@ -73,9 +74,35 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /* Driver Buttons */
+    //<----------- Driver button mappings
     driver.x().onTrue(new AutoBalancing(s_Swerve));
-    driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
+
+    //<----------- Operator button mappings
+
+    //set up gripper open/close
+    XboxController operatorHid = operator.getHID();
+    operator.rightBumper()
+        .onTrue(new InstantCommand(m_gripper::openGripper))
+        .onFalse(new InstantCommand(m_gripper::closeGripper));
+
+    //set up arm preset positions
+    operator.a().onTrue(new InstantCommand(
+        () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper)));
+    operator.x().onTrue(new InstantCommand(
+        () -> m_arm.setTargetPosition(Constants.Arm.kScoringPosition, m_gripper)));
+    operator.y().onTrue(new InstantCommand(
+        () -> m_arm.setTargetPosition(Constants.Arm.kIntakePosition, m_gripper)));
+    operator.b().onTrue(new InstantCommand(
+        () -> m_arm.setTargetPosition(Constants.Arm.kFeederPosition, m_gripper)));
+
+    //set up arm manual and auto functions
+    m_arm.setDefaultCommand(new RunCommand(m_arm::runAutomatic, m_arm));
+    new Trigger(() ->
+        Math.abs(operatorHid.getRightTriggerAxis() - operatorHid.getLeftTriggerAxis()) > Constants.OIConstants.kArmManualDeadband
+    ).whileTrue(new RunCommand(
+        () -> m_arm.runManual((operatorHid.getRightTriggerAxis() - operatorHid.getLeftTriggerAxis()) * Constants.OIConstants.kArmManualScale)
+        , m_arm));
   }
 
   private void configureSmartDashboard() {

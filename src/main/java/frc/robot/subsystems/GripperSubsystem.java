@@ -1,23 +1,15 @@
-
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import frc.robot.Constants;
-import frc.lib.PIDGains;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.PIDGains;
+import frc.robot.Constants;
 
 public class GripperSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
@@ -57,6 +49,10 @@ public class GripperSubsystem extends SubsystemBase {
   public void closeGripper() {
     m_setpoint = Constants.Gripper.kClosePosition;
   }
+
+  // TODO: add granular trigger controls for position/angle
+  //       We can copy what is being done within the {@link frc.robot.subsystems.ArmSubsystem} to track
+  //       a target position using the {@link edu.wpi.first.math.trajectory.TrapezoidProfile} class.
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
