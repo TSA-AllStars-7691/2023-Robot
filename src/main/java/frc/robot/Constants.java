@@ -85,7 +85,11 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4.4196; // meters per second
-    public static final double maxAngularVelocity = 3;
+    // public static final double maxAngularVelocity = 3;
+    public static final double maxAngularVelocity = 4.4196;
+    public static final double slowSpeed = 1;
+    public static final double slowAngularVelocity = 1;
+
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
@@ -187,12 +191,14 @@ public final class Constants {
   }
 
   public static final class Arm {
-    public static final int kArmCanId = 5;
+    public static final int kArmCanId = 13;
     public static final boolean kArmInverted = false;
     public static final int kCurrentLimit = 40;
 
-    public static final double kSoftLimitReverse = 0.0;
-    public static final double kSoftLimitForward = 4.6;
+    // public static final double kSoftLimitReverse = 0.0;
+    // public static final double kSoftLimitForward = 4.6;
+    public static final double kSoftLimitReverse = -7;
+    public static final double kSoftLimitForward = 8.6;
 
     public static final double kArmGearRatio = 1.0 / (48.0 * 4.0); 
     public static final double kPositionFactor = kArmGearRatio * 2.0 * Math.PI; //multiply SM value by this number and get arm position in radians
@@ -204,17 +210,27 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(2.0, 2.0);
 
     public static final double kHomePosition = 0.0;
-    public static final double kScoringPosition = 3.05;
-    public static final double kIntakePosition = 4.52;
+    // public static final double kScoringPosition = 3.05;
+    public static final double kScoringPosition = -3.05;
+    public static final double kIntakePosition = 4.64;
     public static final double kFeederPosition = 2.95;
+    public static final double l2ConeScoringPostition = 3.38321;
+    public static final double l2CubeScoringPostition = 3.45332;
+    public static final double ItemHoldPosition = 4.44819;
+
+
+
+
 }
 
 public static final class Gripper {
-    public static final int kGripperCanId = 6;
-    public static final double kSoftLimitReverse = -34.0;
+    public static final int kGripperCanId = 14;
+    public static final double kSoftLimitReverse = -40.0;
     public static final double kSoftLimitForward = 5.0;
-    public static final double kClosePosition = 0.0;
-    public static final double kOpenPosition = -34.0;
+    public static final double kClosePosition = 0;
+    public static final double kCloseConePosition = 0;
+    public static final double kCloseCubePosition = -8.0;
+    public static final double kOpenPosition = -50.0;
     public static final double kSafePosition = -29.0;
     public static final int kCurrentLimit = 10;
     public static final PIDGains kPositionPIDGains = new PIDGains(0.2, 0.0, 0.0);

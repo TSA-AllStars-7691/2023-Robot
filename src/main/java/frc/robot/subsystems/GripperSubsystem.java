@@ -49,6 +49,9 @@ public class GripperSubsystem extends SubsystemBase {
   public void closeGripper() {
     m_setpoint = Constants.Gripper.kClosePosition;
   }
+  public void closeGripperCube() {
+    m_setpoint = Constants.Gripper.kCloseCubePosition;
+  }
 
   // TODO: add granular trigger controls for position/angle
   //       We can copy what is being done within the {@link frc.robot.subsystems.ArmSubsystem} to track

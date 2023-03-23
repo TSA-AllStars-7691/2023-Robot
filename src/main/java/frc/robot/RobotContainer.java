@@ -48,15 +48,17 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
+  private final TeleopSwerve t_TeleSwerve = new TeleopSwerve(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
+            () -> driver.getRawAxis(rotationAxis),
             () -> driver.povDown().getAsBoolean(),
-            () -> driver.leftBumper().getAsBoolean()));
+            () -> driver.leftBumper().getAsBoolean());
+  public RobotContainer() {
+    s_Swerve.setDefaultCommand(
+        t_TeleSwerve
+        );
 
     // Configure the button bindings
     configureButtonBindings();
@@ -75,7 +77,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //<----------- Driver button mappings
-    driver.x().onTrue(new AutoBalancing(s_Swerve));
+    //driver.x().onTrue(new AutoBalancing(s_Swerve));
     driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
 
     //<----------- Operator button mappings
@@ -85,17 +87,29 @@ public class RobotContainer {
     operator.rightBumper()
         .onTrue(new InstantCommand(m_gripper::openGripper))
         .onFalse(new InstantCommand(m_gripper::closeGripper));
+    operator.leftBumper()
+        .onTrue(new InstantCommand(m_gripper::openGripper))
+        .onFalse(new InstantCommand(m_gripper::closeGripperCube));
+    driver.leftBumper()
+        .onTrue(new InstantCommand(t_TeleSwerve::slowMode))
+        .onFalse(new InstantCommand(t_TeleSwerve::fastMode));
+    driver.rightBumper()
+        .onTrue(new InstantCommand(t_TeleSwerve::slowMode))
+        .onFalse(new InstantCommand(t_TeleSwerve::fastMode));
 
     //set up arm preset positions
     operator.a().onTrue(new InstantCommand(
         () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper)));
     operator.x().onTrue(new InstantCommand(
-        () -> m_arm.setTargetPosition(Constants.Arm.kScoringPosition, m_gripper)));
+        () -> m_arm.setTargetPosition(Constants.Arm.l2CubeScoringPostition, m_gripper)));
     operator.y().onTrue(new InstantCommand(
         () -> m_arm.setTargetPosition(Constants.Arm.kIntakePosition, m_gripper)));
     operator.b().onTrue(new InstantCommand(
-        () -> m_arm.setTargetPosition(Constants.Arm.kFeederPosition, m_gripper)));
-
+        () -> m_arm.setTargetPosition(Constants.Arm.l2ConeScoringPostition, m_gripper)));
+    operator.povLeft().onTrue(new InstantCommand(
+        () -> m_arm.setTargetPosition(Constants.Arm.ItemHoldPosition, m_gripper)));
+ 
+    
     //set up arm manual and auto functions
     m_arm.setDefaultCommand(new RunCommand(m_arm::runAutomatic, m_arm));
     new Trigger(() ->
@@ -111,6 +125,8 @@ public class RobotContainer {
     autoChooser.addOption("SUSSY - CADEN", sussy);
 
     SmartDashboard.putData(autoChooser);
+    SmartDashboard.putData(m_arm);
+    SmartDashboard.putData(m_gripper);
   }
 
   public void disabledInit() {

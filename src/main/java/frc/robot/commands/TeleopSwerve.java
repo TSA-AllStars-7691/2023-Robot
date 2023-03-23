@@ -18,6 +18,9 @@ public class TeleopSwerve extends CommandBase {
   private DoubleSupplier rotationSup;
   private BooleanSupplier autoCenter;
   private BooleanSupplier robotCentricSup;
+  private Double speed;
+  private Double angularVelocity;
+
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(2.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.0);
@@ -38,7 +41,19 @@ public class TeleopSwerve extends CommandBase {
     this.rotationSup = rotationSup;
     this.autoCenter = autoCenter;
     this.robotCentricSup = robotCentricSup;
+    this.speed = Constants.Swerve.maxSpeed;
+    this.angularVelocity = Constants.Swerve.maxAngularVelocity;
   }
+
+  public void slowMode(){
+    this.speed = Constants.Swerve.slowSpeed;
+    this.angularVelocity = Constants.Swerve.slowAngularVelocity;
+  }  
+  public void fastMode(){
+    this.speed = Constants.Swerve.maxSpeed;
+    this.angularVelocity = Constants.Swerve.maxAngularVelocity;
+  }
+
 
   @Override
   public void execute() {
@@ -55,9 +70,10 @@ public class TeleopSwerve extends CommandBase {
       segmentLineUp lineup = new segmentLineUp(s_Swerve, segmentLineUp.SEGMENT.CUBE_3, () -> s_Swerve.getPoint());
       lineup.schedule();
     }
+
     s_Swerve.drive(
-        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-        rotationVal * Constants.Swerve.maxAngularVelocity,
+        new Translation2d(translationVal, strafeVal).times(speed),
+        rotationVal * angularVelocity,
         !robotCentricSup.getAsBoolean(),
         false);
   }
