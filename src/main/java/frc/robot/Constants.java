@@ -86,9 +86,16 @@ public final class Constants {
     /* Swerve Profiling Values */
     public static final double maxSpeed = 4.4196; // meters per second
     // public static final double maxAngularVelocity = 3;
-    public static final double maxAngularVelocity = 4.4196;
+    public static final double maxAngularVelocity =  4.4196;
+    public static final double mediumSpeed = 2.8; // meters per second
+    public static final double mediumAngularVelocity = 2.8;
     public static final double slowSpeed = 1;
     public static final double slowAngularVelocity = 1;
+
+
+//Tony's hypothesis on the angle issue with fast mode option
+//1)the pid function might take into account the max speed and it might be doing weird thigs if we are driving at a speed that is not max speed
+//2)we should just use the setSpeed() method in swerve modules.java insteadof having custom porofiling methods, it might fix our problem.
 
 
     /* Neutral Modes */
@@ -208,6 +215,9 @@ public final class Constants {
     public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(0.0, 0.4, 12.0/kArmFreeSpeed, 0.0);
     public static final PIDGains kArmPositionGains = new PIDGains(0.6, 0.0, 0.0);
     public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(2.0, 2.0);
+    public static final TrapezoidProfile.Constraints kSlowArmMotionConstraint = new TrapezoidProfile.Constraints(1.0, 1.0);
+
+
 
     public static final double kHomePosition = 0.0;
     // public static final double kScoringPosition = 3.05;

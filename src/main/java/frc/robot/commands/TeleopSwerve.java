@@ -41,14 +41,19 @@ public class TeleopSwerve extends CommandBase {
     this.rotationSup = rotationSup;
     this.autoCenter = autoCenter;
     this.robotCentricSup = robotCentricSup;
-    this.speed = Constants.Swerve.maxSpeed;
-    this.angularVelocity = Constants.Swerve.maxAngularVelocity;
+    this.speed = Constants.Swerve.mediumSpeed;
+    this.angularVelocity = Constants.Swerve.mediumAngularVelocity;
   }
 
   public void slowMode(){
     this.speed = Constants.Swerve.slowSpeed;
     this.angularVelocity = Constants.Swerve.slowAngularVelocity;
   }  
+  public void MediumMode(){
+    this.speed = Constants.Swerve.mediumSpeed;
+    this.angularVelocity = Constants.Swerve.mediumAngularVelocity;
+  }  
+
   public void fastMode(){
     this.speed = Constants.Swerve.maxSpeed;
     this.angularVelocity = Constants.Swerve.maxAngularVelocity;

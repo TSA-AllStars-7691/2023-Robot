@@ -27,6 +27,9 @@ public class ArmSubsystem extends SubsystemBase {
   private TrapezoidProfile.State targetState;
   private double feedforward;
   private double manualValue;
+  private TrapezoidProfile.Constraints m_SpeedConstraints;
+
+  
   
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -52,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_timer = new Timer();
     m_timer.start();
     m_timer.reset();
-
+    m_SpeedConstraints = Constants.Arm.kArmMotionConstraint;
     updateMotionProfile();
   }
 
@@ -66,7 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
   private void updateMotionProfile() {
     TrapezoidProfile.State state = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     TrapezoidProfile.State goal = new TrapezoidProfile.State(m_setpoint, 0.0);
-    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint, goal, state);
+    m_profile = new TrapezoidProfile(m_SpeedConstraints, goal, state);
     m_timer.reset();
   }
 
@@ -82,12 +85,21 @@ public class ArmSubsystem extends SubsystemBase {
     feedforward = Constants.Arm.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Arm.kArmZeroCosineOffset, targetState.velocity);
     m_controller.setReference(targetState.position, CANSparkMax.ControlType.kPosition, 0, feedforward);
   }
+  public void armSlowMode(){
+    m_SpeedConstraints = Constants.Arm.kSlowArmMotionConstraint;
+    updateMotionProfile();
+  }
+  public void armDefaultMode(){
+    m_SpeedConstraints = Constants.Arm.kArmMotionConstraint;
+    updateMotionProfile();
+
+  }
 
   public void runManual(double _power) {
     //reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and passively
     m_setpoint = m_encoder.getPosition();
     targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
-    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint, targetState, targetState);
+    m_profile = new TrapezoidProfile(m_SpeedConstraints, targetState, targetState);
     //update the feedforward variable with the newly zero target velocity
     feedforward = Constants.Arm.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Arm.kArmZeroCosineOffset, targetState.velocity);
     m_motor.set(_power + (feedforward / 12.0));
