@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.675314779200987,
-        "y": 2.6452338618962945
+        "x": 2.115324914410513,
+        "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.129985302704464,
-        "y": 1.1647551500179032
+        "x": 2.483914810910934,
+        "y": 2.981250410090953
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -24,19 +24,19 @@
     },
     {
       "anchorPoint": {
-        "x": 4.867344435542387,
-        "y": 5.024433980486675
+        "x": 5.857374910184913,
+        "y": 3.0
       },
       "prevControl": {
-        "x": 5.513957157339256,
-        "y": 3.9810361794053586
+        "x": 4.576603618257165,
+        "y": 3.034306373890922
       },
       "nextControl": {
-        "x": 5.513957157339256,
-        "y": 3.9810361794053586
+        "x": 7.138146202112662,
+        "y": 2.965693626109078
       },
       "holonomicAngle": 0.0,
-      "isReversal": true,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -49,26 +49,45 @@
     },
     {
       "anchorPoint": {
-        "x": 5.232757815941798,
-        "y": 1.050563468643088
+        "x": 3.856169766547807,
+        "y": 2.9846545285101977
       },
       "prevControl": {
-        "x": 4.8178298432287106,
-        "y": 2.327024878708765
+        "x": 4.542297244366242,
+        "y": 2.986609535273278
       },
       "nextControl": null,
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Autobalance"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "markers": []
+  "maxVelocity": 3.0,
+  "maxAcceleration": 3.0,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.0,
+      "names": [
+        "event",
+        "cool"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "event"
+      ]
+    }
+  ]
 }

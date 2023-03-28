@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,15 +44,32 @@ public class RobotContainer {
     private final ArmSubsystem m_arm = new ArmSubsystem();
     /* Autonomous Mode Chooser */
     private final SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
+    private final SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        s_Swerve::getPose,
+        s_Swerve::resetOdometry,
+        Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+        new PIDConstants(Constants.Autonomous.kPXController, 0, 0),
+        new PIDConstants(Constants.Autonomous.kPThetaController,
+                0,
+                0),
+        s_Swerve::setModuleStates,
+        eventMap,
+        true,
+        s_Swerve);
+
+private static Map<String, Command> eventMap = new HashMap<>();
+{
+    eventMap.put("AutoBalance", new AutoBalancing(s_Swerve, true));
+}
 
     /* Autonomous Modes */
     PathPlannerTrajectory moveForward = PathPlanner.loadPath("Move Forward",
             Constants.AutoConstants.kMaxSpeedMetersPerSecond,
             Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
-    PathPlannerTrajectory sCurve = PathPlanner.loadPath("S Curve",
+    PathPlannerTrajectory AutoBalance = PathPlanner.loadPath("Auto-Balance",
             Constants.AutoConstants.kMaxSpeedMetersPerSecond,
             Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
-    PathPlannerTrajectory sussy = PathPlanner.loadPath("sussy",
+    PathPlannerTrajectory DoNothing = PathPlanner.loadPath("DoNothing",
             Constants.AutoConstants.kMaxSpeedMetersPerSecond,
             Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
@@ -129,8 +153,8 @@ public class RobotContainer {
 
     private void configureSmartDashboard() {
         autoChooser.setDefaultOption("Move forward", moveForward);
-        autoChooser.addOption("S curve", sCurve);
-        autoChooser.addOption("SUSSY - CADEN", sussy);
+        autoChooser.addOption("Auto-Balance", AutoBalance);
+        autoChooser.addOption("DoNothing", DoNothing);
 
         SmartDashboard.putData(autoChooser);
         SmartDashboard.putData(m_arm);
@@ -149,6 +173,10 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // Executes the autonomous command chosen in smart dashboard
-        return new executeTrajectory(s_Swerve, autoChooser.getSelected());
+        return new ParallelCommandGroup(
+                new InstantCommand(
+                        () -> s_Swerve.getField().getObject("Field").setTrajectory(
+                                autoChooser.getSelected())),
+                autoBuilder.fullAuto(autoChooser.getSelected()));
     }
 }
