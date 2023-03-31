@@ -154,7 +154,7 @@ public final class Constants {
   public static final class AutoConstants {
     public static final PathConstraints constraints = new PathConstraints(1, 1);
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 1;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
@@ -165,7 +165,7 @@ public final class Constants {
   }
 
   public static final class PhotonVision{
-    public static final String photonVisionName = "OV5647";
+    public static final String photonVisionName = "Arducam_OV9281_USB_Camera";
     public static final Transform3d robotToCam =
     new Transform3d(
             new Translation3d(Units.inchesToMeters(11.4), 0.0, Units.inchesToMeters(6.4)),
@@ -227,6 +227,8 @@ public final class Constants {
     public static final double l2ConeScoringPostition = 3.38321;
     public static final double l2CubeScoringPostition = 3.45332;
     public static final double ItemHoldPosition = 4.44819;
+    public static final double DoubleSubstatiionPositiion = 2.95;
+
 
 
 
@@ -244,6 +246,22 @@ public static final class Gripper {
     public static final double kSafePosition = -29.0;
     public static final int kCurrentLimit = 10;
     public static final PIDGains kPositionPIDGains = new PIDGains(0.2, 0.0, 0.0);
+}
+
+public static final class Autonomous {
+  public static final PathConstraints constraints = new PathConstraints(1, 1);
+
+  public static final double kMaxSpeedMetersPerSecond = .5;
+  public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+  public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+  public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+
+
+
+  public static final double kPXController = 1;
+  public static final double kPYController = 1;
+  public static final double kPThetaController =  0.8;// change this if ossolation, less if ossolating, more if not working
 }
 
 }
