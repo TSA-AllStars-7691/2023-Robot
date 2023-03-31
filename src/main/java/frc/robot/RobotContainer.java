@@ -81,8 +81,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // <----------- Driver button mappings
-        // driver.x().onTrue(new AutoBalancing(s_Swerve));
-        driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
+			driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
+			driver.x().onTrue(new SequentialCommandGroup(
+				new InstantCommand(() -> setGamePiece(GamePiece.CUBE)),
+				new SetPosition(s_Wrist, s_Elevator, Position.CUBEINTAKE, () -> GamePiece.CUBE)));
 
         // <----------- Operator button mappings
 
@@ -111,11 +113,8 @@ public class RobotContainer {
         operator.b().onTrue(new InstantCommand(
                 () -> m_arm.setTargetPosition(Constants.Arm.l2ConeScoringPostition, m_gripper)));
         operator.povLeft().onTrue(new InstantCommand(
-                () -> m_arm.setTargetPosition(Constants.Arm.ItemHoldPosition, m_gripper)));
-        operator.povRight().onTrue(new InstantCommand(
-                () -> m_arm.armSlowMode()))
-                .onFalse(new InstantCommand(
-                        () -> m_arm.armDefaultMode()));
+					() -> m_arm.setTargetPosition(Constants.Arm.ItemHoldPosition, m_gripper)));
+					 
 
         // set up arm manual and auto functions
         m_arm.setDefaultCommand(new RunCommand(m_arm::runAutomatic, m_arm));
