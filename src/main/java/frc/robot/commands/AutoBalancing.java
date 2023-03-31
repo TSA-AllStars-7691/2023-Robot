@@ -22,7 +22,7 @@ public class AutoBalancing extends CommandBase {
     @Override
     public void execute() {
         if (!sideways) {
-            double translationVal = s_Swerve.getPitch().getDegrees() > 0 ? -.75 : .75;
+            double translationVal = s_Swerve.getPitch().getDegrees() > 0 ? -.350 : .350;
             s_Swerve.drive(
                     new Translation2d(translationVal, 0), 0, true, false);
         } else {
@@ -40,6 +40,6 @@ public class AutoBalancing extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(s_Swerve.getPitch().getDegrees()) < 7;
+        return Math.abs(s_Swerve.getPitch().getDegrees()) < 9;
     }
 }

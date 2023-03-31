@@ -59,7 +59,7 @@ public class RobotContainer {
 
 private static Map<String, Command> eventMap = new HashMap<>();
 {
-    eventMap.put("AutoBalance", new AutoBalancing(s_Swerve, true));
+    eventMap.put("AutoBalance", new AutoBalancing(s_Swerve, false));
 }
 
     /* Autonomous Modes */
@@ -70,8 +70,9 @@ private static Map<String, Command> eventMap = new HashMap<>();
             Constants.AutoConstants.kMaxSpeedMetersPerSecond,
             Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
     PathPlannerTrajectory DoNothing = PathPlanner.loadPath("DoNothing",
-            Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-            Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+            0,
+           0);
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,8 +82,8 @@ private static Map<String, Command> eventMap = new HashMap<>();
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
             () -> driver.getRawAxis(rotationAxis),
-            () -> true,
-            () -> true);
+            () -> false,
+            () -> false);
 
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
