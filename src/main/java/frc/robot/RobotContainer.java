@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.executeTrajectory;
@@ -108,8 +111,17 @@ private static Map<String, Command> eventMap = new HashMap<>();
         // <----------- Driver button mappings
 			driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
 			driver.x().onTrue(new SequentialCommandGroup(
-				new InstantCommand(() -> setGamePiece(GamePiece.CUBE)),
-				new SetPosition(s_Wrist, s_Elevator, Position.CUBEINTAKE, () -> GamePiece.CUBE)));
+                                //get cone from double substation autonomously during teleop.
+                                
+				//new InstantCommand(() -> {Null} /* insert vision line up */)))
+                                new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kFeederPosition, m_gripper)),
+                                new InstantCommand(m_gripper::openGripper),
+                                //new InstantCommand(() -> {Null} /* insert move forward */)))
+                                new InstantCommand(m_gripper::closeGripper),
+                                //new InstantCommand(() -> {Null} /* insert move back sligtly */)))
+                                new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper))
+
+                        )); 
 
         // <----------- Operator button mappings
 
