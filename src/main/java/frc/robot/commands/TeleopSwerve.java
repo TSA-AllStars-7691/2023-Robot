@@ -72,8 +72,14 @@ public class TeleopSwerve extends CommandBase {
 
     /* Drive */
     if(autoCenter.getAsBoolean()){
-      segmentLineUp lineup = new segmentLineUp(s_Swerve, Constants.SEGMENT.CUBE_3, () -> s_Swerve.getPoint());
-      lineup.schedule();
+      // pseudo-code
+      // 1. find fiduciary target
+      // 2. calculate transpose to get centers to the target
+
+      
+      // segmentLineUp.getTrajectory(Constants.SEGMENT.CUBE_3, () -> s_Swerve.getPose());
+      // segmentLineUp lineup = new segmentLineUp(s_Swerve, Constants.SEGMENT.CUBE_3, () -> s_Swerve.getPoint());
+      // lineup.schedule();
     }
 
     s_Swerve.drive(

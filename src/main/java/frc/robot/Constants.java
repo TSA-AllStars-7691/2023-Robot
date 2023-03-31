@@ -172,7 +172,7 @@ public final class Constants {
             new Rotation3d(
                     0, 0,
                     0));
-  }
+}
 
   public static final class AprilTags {
     public static final AprilTag tag1 = new AprilTag(1, FieldConstants.aprilTags.get(1));

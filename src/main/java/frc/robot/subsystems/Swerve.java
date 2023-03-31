@@ -25,11 +25,11 @@ public class Swerve extends SubsystemBase {
   private SwerveDrivePoseEstimator swervePoseEstimator;
   private SwerveModule[] mSwerveMods;
 
-  private PhotonVisionWrapper pcw;
+  private Vision pcw;
 
   private Field2d field;
 
-  public Swerve() {
+  public Swerve(Vision pcw) {
     zeroGyro();
 
     mSwerveMods = new SwerveModule[] {
@@ -42,7 +42,7 @@ public class Swerve extends SubsystemBase {
     swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(),
         new Pose2d());
 
-    pcw = new PhotonVisionWrapper();
+    this.pcw = pcw;
 
     field = new Field2d();
     SmartDashboard.putData(field);
@@ -137,20 +137,17 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
     Rotation2d yawValue = getYaw();
     double rawYawValue = gyro.getAngle();
-    // System.out.printf("DEBUG: yawValue: %s\n", yawValue);
-    // System.out.printf("DEBUG: rawYawValue: %s\n", rawYawValue);
 
-        swervePoseEstimator.update(yawValue, getPositions());
-        Optional<EstimatedRobotPose> result =
-                pcw.getEstimatedGlobalPose(getPose());
+    swervePoseEstimator.update(yawValue, getPositions());
 
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            // swervePoseEstimator.addVisionMeasurement(
-            //         camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-        }
+    Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(getPose());
+    if (result.isPresent()) {
+      EstimatedRobotPose camPose = result.get();
+      swervePoseEstimator.addVisionMeasurement(
+              camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    }
 
-        field.setRobotPose(getPose());
+    field.setRobotPose(getPose());
 
     SmartDashboard.putNumber("Pigeon2 Yaw", rawYawValue);
     SmartDashboard.putNumber("Pigeon2 Pitch", getPitch().getDegrees());

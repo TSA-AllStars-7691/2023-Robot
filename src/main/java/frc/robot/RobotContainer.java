@@ -32,6 +32,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
     /* Drive Controls */
@@ -42,7 +43,9 @@ public class RobotContainer {
     private final CommandXboxController driver = new CommandXboxController(Constants.OIConstants.kDriverController);
     private final CommandXboxController operator = new CommandXboxController(Constants.OIConstants.kOperatorController);
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    private final Vision s_Vision = new Vision();
+    private final Swerve s_Swerve = new Swerve(s_Vision);
+
     private final GripperSubsystem m_gripper = new GripperSubsystem();
     private final ArmSubsystem m_arm = new ArmSubsystem();
     /* Autonomous Mode Chooser */
