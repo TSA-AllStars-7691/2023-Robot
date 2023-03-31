@@ -72,7 +72,7 @@ public class TeleopSwerve extends CommandBase {
 
     /* Drive */
     if(autoCenter.getAsBoolean()){
-      segmentLineUp lineup = new segmentLineUp(s_Swerve, segmentLineUp.SEGMENT.CUBE_3, () -> s_Swerve.getPoint());
+      segmentLineUp lineup = new segmentLineUp(s_Swerve, Constants.SEGMENT.CUBE_3, () -> s_Swerve.getPoint());
       lineup.schedule();
     }
 

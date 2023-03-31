@@ -249,19 +249,62 @@ public static final class Gripper {
 }
 
 public static final class Autonomous {
-  public static final PathConstraints constraints = new PathConstraints(1, 1);
+	public static final PathConstraints constraints = new PathConstraints(1, 1);
 
-  public static final double kMaxSpeedMetersPerSecond = .5;
-  public static final double kMaxAccelerationMetersPerSecondSquared = 1;
-  public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-  public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+	public static final double kMaxSpeedMetersPerSecond = .5;
+	public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+	public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+	public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-
-
-
-  public static final double kPXController = 1;
-  public static final double kPYController = 1;
-  public static final double kPThetaController =  0.8;// change this if ossolation, less if ossolating, more if not working
+	public static final double kPXController = 1;
+	public static final double kPYController = 1;
+	public static final double kPThetaController = 0.8;// change this if ossolation, less if ossolating, more if not working
 }
 
+
+public enum SEGMENT { // Numbers in order of segment from left to right (driver station POV)
+	CONE_1(0), CONE_2(31.8), CONE_3(35.2), CONE_4(-1), CONE_5(-1), CONE_6(-1),
+	CUBE_1(0), CUBE_2(20.6), CUBE_3(35.2), HUMANPLAYER(-1);
+
+	// intake Ground Cube: 0
+	// intake Cone Upright: 12
+	// intake Cone Tipped: 0
+
+	// intake Cone Single HP: 8.9
+	// intake Cube Single HP: 11.8
+
+	private double level;
+
+	private SEGMENT(double level) {
+		 this.level = level;
+	}
+
+	public static SEGMENT getSegment(int level, boolean cone) {
+		 if (cone) {
+			  switch (level) {
+					case 1:
+						 return CONE_1;
+					case 2:
+						 return CONE_2;
+					case 3:
+						 return CONE_3;
+			  }
+		 } else {
+			  switch (level) {
+					case 1:
+						 return CUBE_1;
+					case 2:
+						 return CUBE_2;
+					case 3:
+						 return CUBE_3;
+			  }
+		 }
+		 return null;
+	}
+
+	public double getValue() {
+		 return level;
+	}
+
+}
 }
