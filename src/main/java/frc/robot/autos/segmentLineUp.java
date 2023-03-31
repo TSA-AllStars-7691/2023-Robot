@@ -65,6 +65,16 @@ public class segmentLineUp {
                 lineUpTranslation = new Translation2d(14.40, 7.59);
                 lineUpRotation = Rotation2d.fromDegrees(90);
                 break;
+            case DOUBLE_SUBSTATIOIN:
+                // TODO: update these with proper values from field
+                lineUpTranslation = new Translation2d(14.40, 7.59);
+                lineUpRotation = Rotation2d.fromDegrees(90);
+                break;
+            case BEFORE_DOUBLE_SUBSTATIOIN:
+                 // TODO: update these with proper values from field
+                lineUpTranslation = new Translation2d(14.40, 7.59);
+                lineUpRotation = Rotation2d.fromDegrees(90);
+                break;
         }
 
         Rotation2d startHeading = new Translation2d(lineUpTranslation.getX(), lineUpTranslation.getY())
