@@ -223,7 +223,8 @@ public final class Constants {
     // public static final double kScoringPosition = 3.05;
     public static final double kScoringPosition = -3.05;
     public static final double kIntakePosition = 4.64;
-    public static final double kFeederPosition = 2.95;
+	public static final double kFeederPosition = 2.95;
+	public static final double kDoubleSubstationPosition = 3.29;
     public static final double l2ConeScoringPostition = 3.38321;
     public static final double l2CubeScoringPostition = 3.45332;
     public static final double ItemHoldPosition = 4.44819;

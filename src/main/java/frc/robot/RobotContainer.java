@@ -6,8 +6,7 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.Map;
-
-
+import java.util.Optional;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -20,12 +19,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Arm;
 import frc.robot.autos.executeTrajectory;
 import frc.robot.commands.AutoBalancing;
 import frc.robot.commands.TeleopSwerve;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.*;
 
 public class RobotContainer {
     /* Drive Controls */
@@ -44,12 +46,12 @@ public class RobotContainer {
     private final CommandXboxController operator = new CommandXboxController(Constants.OIConstants.kOperatorController);
     /* Subsystems */
     private final Vision s_Vision = new Vision();
-    private final Swerve s_Swerve = new Swerve(s_Vision);
+    public final Swerve s_Swerve = new Swerve(s_Vision);
 
     private final GripperSubsystem m_gripper = new GripperSubsystem();
     private final ArmSubsystem m_arm = new ArmSubsystem();
     /* Autonomous Mode Chooser */
-    private final SendableChooser<PathPlannerTrajectory> autoChooser = new SendableChooser<>();
+    private final SendableChooser<Optional<PathPlannerTrajectory>> autoChooser = new SendableChooser<>();
     private final SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
         s_Swerve::getPose,
         s_Swerve::resetOdometry,
@@ -113,18 +115,10 @@ private static Map<String, Command> eventMap = new HashMap<>();
     private void configureButtonBindings() {
         // <----------- Driver button mappings
 			driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
-			driver.x().onTrue(new SequentialCommandGroup(
-                                //get cone from double substation autonomously during teleop.
-                                
-				//new InstantCommand(() -> {Null} /* insert vision line up */)))
-                                new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kFeederPosition, m_gripper)),
-                                new InstantCommand(m_gripper::openGripper),
-                                //new InstantCommand(() -> {Null} /* insert move forward */)))
-                                new InstantCommand(m_gripper::closeGripper),
-                                //new InstantCommand(() -> {Null} /* insert move back sligtly */)))
-                                new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper))
-
-                        )); 
+			driver.x().onTrue(
+				new TeleopSubstationIntake(m_gripper, m_arm, autoBuilder, s_Swerve::getPose)
+			);
+			driver.b().onTrue( new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));
 
         // <----------- Operator button mappings
 
@@ -167,9 +161,9 @@ private static Map<String, Command> eventMap = new HashMap<>();
     }
 
     private void configureSmartDashboard() {
-        autoChooser.setDefaultOption("Move forward", moveForward);
-        autoChooser.addOption("Auto-Balance", AutoBalance);
-        autoChooser.addOption("DoNothing", DoNothing);
+        autoChooser.setDefaultOption("Move forward", Optional.of(moveForward));
+        autoChooser.addOption("Auto-Balance", Optional.ofNullable(AutoBalance));
+        autoChooser.addOption("DoNothing", Optional.empty());
 
         SmartDashboard.putData(autoChooser);
         SmartDashboard.putData(m_arm);
@@ -188,10 +182,14 @@ private static Map<String, Command> eventMap = new HashMap<>();
      */
     public Command getAutonomousCommand() {
         // Executes the autonomous command chosen in smart dashboard
+        Optional<PathPlannerTrajectory> choice = autoChooser.getSelected();
+        if (choice.isEmpty()) {
+            return null;
+        }
         return new ParallelCommandGroup(
                 new InstantCommand(
                         () -> s_Swerve.getField().getObject("Field").setTrajectory(
-                                autoChooser.getSelected())),
-                autoBuilder.fullAuto(autoChooser.getSelected()));
+                            choice.get())),
+                autoBuilder.fullAuto(choice.get()));
     }
 }
