@@ -267,7 +267,8 @@ public enum SEGMENT { // Numbers in order of segment from left to right (driver 
   // TODO: the "level" is the height of the arm
 	CONE_1(0), CONE_2(31.8), CONE_3(35.2), CONE_4(-1), CONE_5(-1), CONE_6(-1),
 	CUBE_1(0), CUBE_2(20.6), CUBE_3(35.2), HUMANPLAYER(-1), 
-	DOUBLE_SUBSTATIOIN(-1), BEFORE_DOUBLE_SUBSTATIOIN(-1);
+	BLUE_DOUBLE_SUBSTATIOIN(-1), BLUE_BEFORE_DOUBLE_SUBSTATIOIN(-1),
+  RED_DOUBLE_SUBSTATIOIN(-1), RED_BEFORE_DOUBLE_SUBSTATIOIN(-1);
 
 	// intake Ground Cube: 0
 	// intake Cone Upright: 12

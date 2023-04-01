@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class segmentLineUp {
@@ -65,16 +66,31 @@ public class segmentLineUp {
                 lineUpTranslation = new Translation2d(14.40, 7.59);
                 lineUpRotation = Rotation2d.fromDegrees(90);
                 break;
-            case DOUBLE_SUBSTATIOIN:
+            case BLUE_DOUBLE_SUBSTATIOIN:
                 // TODO: update these with proper values from field
-                lineUpTranslation = new Translation2d(14.40, 7.59);
+                lineUpTranslation = new Translation2d(16.178784 - Units.inchesToMeters(28.5), 
+                    6.749796 - Units.inchesToMeters(28.5));
                 lineUpRotation = Rotation2d.fromDegrees(90);
                 break;
-            case BEFORE_DOUBLE_SUBSTATIOIN:
+            case BLUE_BEFORE_DOUBLE_SUBSTATIOIN:
                  // TODO: update these with proper values from field
-                lineUpTranslation = new Translation2d(14.40, 7.59);
+                lineUpTranslation = new Translation2d(16.178784 - Units.inchesToMeters(28.5), 
+                    6.749796 - Units.inchesToMeters(28.5));
                 lineUpRotation = Rotation2d.fromDegrees(90);
                 break;
+            case RED_DOUBLE_SUBSTATIOIN:
+                // TODO: update these with proper values from field
+                lineUpTranslation = new Translation2d(0.36195 + Units.inchesToMeters(28.5), 
+                    6.749796 - Units.inchesToMeters(28.5));
+                lineUpRotation = Rotation2d.fromDegrees(90);
+                break;
+            case RED_BEFORE_DOUBLE_SUBSTATIOIN:
+                // TODO: update these with proper values from field
+                lineUpTranslation = new Translation2d(0.36195 + Units.inchesToMeters(0), 
+                    6.749796 - Units.inchesToMeters(28.5));
+                lineUpRotation = Rotation2d.fromDegrees(90);
+                break;
+                
         }
 
         Rotation2d startHeading = new Translation2d(lineUpTranslation.getX(), lineUpTranslation.getY())

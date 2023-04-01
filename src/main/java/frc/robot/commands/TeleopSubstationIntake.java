@@ -26,11 +26,11 @@ public class TeleopSubstationIntake extends SequentialCommandGroup {
 		DriverStation.Alliance alliance = DriverStation.getAlliance();
 		// TODO: Create a Red and Blue version of these constants
 		Constants.SEGMENT stopBefore = (alliance == DriverStation.Alliance.Blue) ? 
-			Constants.SEGMENT.BEFORE_DOUBLE_SUBSTATIOIN : 
-			Constants.SEGMENT.BEFORE_DOUBLE_SUBSTATIOIN;
+			Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN : 
+			Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN;
 		Constants.SEGMENT stopForIntake = (alliance == DriverStation.Alliance.Blue) ? 
-			Constants.SEGMENT.DOUBLE_SUBSTATIOIN : 
-			Constants.SEGMENT.DOUBLE_SUBSTATIOIN;
+			Constants.SEGMENT.RED_DOUBLE_SUBSTATIOIN : 
+			Constants.SEGMENT.RED_DOUBLE_SUBSTATIOIN;
 
 		addCommands(
                                 
