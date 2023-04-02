@@ -24,6 +24,8 @@ public class Vision extends SubsystemBase {
     private PhotonPoseEstimator positionEstimation;
     private AprilTagFieldLayout aprilTagLayout;
 
+    private Boolean enableVision = false;
+
     /**
      * TODO
      */
@@ -47,11 +49,15 @@ public class Vision extends SubsystemBase {
      * @return Optional<EstimatedRobotPose>
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        if (positionEstimation == null) {
+        if (positionEstimation == null || !enableVision) {
             return Optional.empty();
         }
         positionEstimation.setReferencePose(prevEstimatedRobotPose);
         return positionEstimation.update();
+    }
+
+    public void setVision(Boolean value) {
+        this.enableVision = value;
     }
 
     /**
@@ -60,11 +66,11 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
         // Sets the april tag positions depending on which side the robot starts on.
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-            positionEstimation.getFieldTags().setOrigin(OriginPosition.kBlueAllianceWallRightSide);
-        } else {
-            positionEstimation.getFieldTags().setOrigin(OriginPosition.kRedAllianceWallRightSide);
-        }
+        // if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+            // positionEstimation.getFieldTags().setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+        // } else {
+        //     positionEstimation.getFieldTags().setOrigin(OriginPosition.kRedAllianceWallRightSide);
+        // }
 
         if (camera.getLatestResult().getBestTarget() != null) {
             try {

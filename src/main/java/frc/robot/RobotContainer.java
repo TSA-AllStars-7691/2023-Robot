@@ -161,9 +161,10 @@ private static Map<String, Command> eventMap = new HashMap<>();
     }
 
     private void configureSmartDashboard() {
-        autoChooser.setDefaultOption("Move forward", Optional.of(moveForward));
-        autoChooser.addOption("Auto-Balance", Optional.ofNullable(AutoBalance));
+        autoChooser.addOption("Move forward", Optional.of(moveForward));
+        autoChooser.setDefaultOption("Auto-Balance", Optional.ofNullable(AutoBalance));
         autoChooser.addOption("DoNothing", Optional.empty());
+        autoChooser.addOption("Fully Auto-Balance", Optional.ofNullable(AutoBalance));
 
         SmartDashboard.putData(autoChooser);
         SmartDashboard.putData(m_arm);
@@ -191,5 +192,13 @@ private static Map<String, Command> eventMap = new HashMap<>();
                         () -> s_Swerve.getField().getObject("Field").setTrajectory(
                             choice.get())),
                 autoBuilder.fullAuto(choice.get()));
+    }
+
+    public void enableVision() {
+        s_Vision.setVision(true);
+    }
+    
+    public void disableVision() {
+        s_Vision.setVision(false);
     }
 }

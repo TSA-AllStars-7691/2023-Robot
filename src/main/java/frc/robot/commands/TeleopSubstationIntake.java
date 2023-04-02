@@ -22,22 +22,30 @@ import frc.robot.autos.segmentLineUp;
 public class TeleopSubstationIntake extends SequentialCommandGroup {
 	   //get cone from double substation autonomously during teleop.
 	
+	   // Set to "true" to switch the auton intake poses to be blue or red centric
+	   public static Boolean switchAlliance = true;
+
 	 public TeleopSubstationIntake(GripperSubsystem m_gripper, ArmSubsystem m_arm, SwerveAutoBuilder autoBuilder, Supplier<Pose2d> startPose) {
-		DriverStation.Alliance alliance = DriverStation.getAlliance();
-		// TODO: Create a Red and Blue version of these constants
-		Constants.SEGMENT stopBefore = (alliance == DriverStation.Alliance.Blue) ? 
-			Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN : 
-			Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN;
-		Constants.SEGMENT stopForIntake = (alliance == DriverStation.Alliance.Blue) ? 
-			Constants.SEGMENT.RED_DOUBLE_SUBSTATIOIN : 
-			Constants.SEGMENT.RED_DOUBLE_SUBSTATIOIN;
+		Constants.SEGMENT stopBefore;
+		Constants.SEGMENT stopForIntake;
+		if (switchAlliance) {
+			DriverStation.Alliance alliance = DriverStation.getAlliance();
+			stopBefore = (alliance == DriverStation.Alliance.Blue) ? 
+				Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN : 
+				Constants.SEGMENT.RED_BEFORE_DOUBLE_SUBSTATIOIN;
+			stopForIntake = (alliance == DriverStation.Alliance.Blue) ? 
+				Constants.SEGMENT.BLUE_DOUBLE_SUBSTATIOIN : 
+				Constants.SEGMENT.RED_DOUBLE_SUBSTATIOIN;
+		} else {
+			stopBefore = Constants.SEGMENT.BLUE_BEFORE_DOUBLE_SUBSTATIOIN;
+			stopForIntake = Constants.SEGMENT.BLUE_DOUBLE_SUBSTATIOIN;
+		}
 
 		addCommands(
-                                
-				autoBuilder.followPath(segmentLineUp.getTrajectory(stopBefore, startPose)),
+				autoBuilder.followPath(segmentLineUp.getTrajectory(stopBefore, startPose, Constants.Autonomous.slowConstraints)),
 				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kDoubleSubstationPosition, m_gripper)),
 				new InstantCommand(m_gripper::openGripper),
-				autoBuilder.followPath(segmentLineUp.getTrajectory(stopForIntake, startPose)),
+				autoBuilder.followPath(segmentLineUp.getTrajectory(stopForIntake, startPose, Constants.Autonomous.slowConstraints)),
 				new InstantCommand(m_gripper::closeGripper),
 				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper))
 		);

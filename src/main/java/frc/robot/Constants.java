@@ -168,7 +168,7 @@ public final class Constants {
     public static final String photonVisionName = "Arducam_OV9281_USB_Camera";
     public static final Transform3d robotToCam =
     new Transform3d(
-            new Translation3d(Units.inchesToMeters(11.4), 0.0, Units.inchesToMeters(6.4)),
+            new Translation3d(Units.inchesToMeters((Swerve.trackWidth / 2.0)-7.5), 0.0, Units.inchesToMeters(35)),
             new Rotation3d(
                     0, 0,
                     0));
@@ -251,6 +251,7 @@ public static final class Gripper {
 
 public static final class Autonomous {
 	public static final PathConstraints constraints = new PathConstraints(1, 1);
+	public static final PathConstraints slowConstraints = new PathConstraints(0.5, 0.5);
 
 	public static final double kMaxSpeedMetersPerSecond = .5;
 	public static final double kMaxAccelerationMetersPerSecondSquared = 1;
@@ -267,6 +268,7 @@ public enum SEGMENT { // Numbers in order of segment from left to right (driver 
   // TODO: the "level" is the height of the arm
 	CONE_1(0), CONE_2(31.8), CONE_3(35.2), CONE_4(-1), CONE_5(-1), CONE_6(-1),
 	CUBE_1(0), CUBE_2(20.6), CUBE_3(35.2), HUMANPLAYER(-1), 
+  BLUE_CHARGE_UP(-1), RED_CHARGE_UP(-1),
 	BLUE_DOUBLE_SUBSTATIOIN(-1), BLUE_BEFORE_DOUBLE_SUBSTATIOIN(-1),
   RED_DOUBLE_SUBSTATIOIN(-1), RED_BEFORE_DOUBLE_SUBSTATIOIN(-1);
 
