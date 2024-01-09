@@ -115,9 +115,9 @@ private static Map<String, Command> eventMap = new HashMap<>();
     private void configureButtonBindings() {
         // <----------- Driver button mappings
 			driver.y().onTrue(new InstantCommand(s_Swerve::zeroGyro));
-			driver.x().onTrue(
-				new TeleopSubstationIntake(m_gripper, m_arm, autoBuilder, s_Swerve::getPose)
-			);
+			// driver.x().onTrue(
+			// 	new TeleopSubstationIntake(m_gripper, m_arm, autoBuilder, s_Swerve::getPose)
+			// );
 			driver.b().onTrue( new InstantCommand( () -> CommandScheduler.getInstance().cancelAll()));
 
         // <----------- Operator button mappings
