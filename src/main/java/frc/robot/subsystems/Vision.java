@@ -13,6 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,6 +53,13 @@ public class Vision extends SubsystemBase {
         if (positionEstimation == null || !enableVision) {
             return Optional.empty();
         }
+        if (camera.getLatestResult().getBestTarget() != null) {
+            PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+            if ((target.getBestCameraToTarget().getX() > 1.6) || (int)(target.getPoseAmbiguity() * 100) > 0) {
+                // System.out.print("Ignoring AprilTag due to large error");
+                return Optional.empty();
+            }
+        }
         positionEstimation.setReferencePose(prevEstimatedRobotPose);
         return positionEstimation.update();
     }
@@ -75,6 +83,8 @@ public class Vision extends SubsystemBase {
         if (camera.getLatestResult().getBestTarget() != null) {
             try {
                 PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+                SmartDashboard.putNumber("PoseAmbiguity From AprilTag", (int)(target.getPoseAmbiguity() * 100));
+                SmartDashboard.putNumber("FiducialId From AprilTag", target.getFiducialId());
                 SmartDashboard.putNumber("X From AprilTag", target.getBestCameraToTarget().getX());
                 SmartDashboard.putNumber("Y From AprilTag", target.getBestCameraToTarget().getY());
                 SmartDashboard.putNumber("Angle From AprilTag", target.getYaw());

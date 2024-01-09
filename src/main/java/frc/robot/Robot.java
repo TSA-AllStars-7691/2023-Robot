@@ -64,6 +64,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.disabledInit();
+    m_robotContainer.enableVision();
+    System.out.printf("Starting mode: 'disabled'\n");
   }
 
   @Override
@@ -76,8 +78,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    System.out.printf("Starting mode: 'autonomous'\n");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.disableVision();
+//    m_robotContainer.disableVision();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -92,6 +95,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    System.out.printf("Starting mode: 'teleop'\n");
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -108,7 +113,24 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void disabledExit() {
+    System.out.printf("Exiting mode: 'disabled'\n");
+  }
+
+  @Override
+  public void autonomousExit() {
+    System.out.printf("Exiting mode: 'auton'\n");
+  }
+
+  @Override
+  public void teleopExit() {
+    System.out.printf("Exiting mode: 'teleop'\n");
+  }
+
+  @Override
   public void testInit() {
+
+    System.out.printf("Starting mode: 'test'\n");
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }

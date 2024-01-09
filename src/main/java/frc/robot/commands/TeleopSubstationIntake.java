@@ -43,11 +43,11 @@ public class TeleopSubstationIntake extends SequentialCommandGroup {
 
 		addCommands(
 				autoBuilder.followPath(segmentLineUp.getTrajectory(stopBefore, startPose, Constants.Autonomous.slowConstraints)),
-				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kDoubleSubstationPosition, m_gripper)),
-				new InstantCommand(m_gripper::openGripper),
-				autoBuilder.followPath(segmentLineUp.getTrajectory(stopForIntake, startPose, Constants.Autonomous.slowConstraints)),
-				new InstantCommand(m_gripper::closeGripper),
-				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper))
+//				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kDoubleSubstationPosition, m_gripper)),
+//				new InstantCommand(m_gripper::openGripper),
+				autoBuilder.followPath(segmentLineUp.getTrajectory(stopForIntake, startPose, Constants.Autonomous.slowConstraints))
+//				new InstantCommand(m_gripper::closeGripper),
+//				new InstantCommand( () -> m_arm.setTargetPosition(Constants.Arm.kHomePosition, m_gripper))
 		);
 	}
 

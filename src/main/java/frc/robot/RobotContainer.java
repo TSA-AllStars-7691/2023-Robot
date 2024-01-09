@@ -169,6 +169,7 @@ private static Map<String, Command> eventMap = new HashMap<>();
         SmartDashboard.putData(autoChooser);
         SmartDashboard.putData(m_arm);
         SmartDashboard.putData(m_gripper);
+        SmartDashboard.putString("LEDPreset", "Default");
 
     }
 
